@@ -9,13 +9,15 @@ public class BodyStore extends Store {
     }
 
     @Override
-    public Body get() {
+    public synchronized Body get() {
         return (Body) super.get();
     }
 
-    public void put(Body detail) {
-        if(details.size()<limit)
+    public synchronized void put(Body detail) {
+        if(details.size()<limit) {
             details.push(detail);
+            notify();
+        }
         else System.err.println("Body store is full!");
     }
 }

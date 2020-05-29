@@ -9,13 +9,15 @@ public class AccessoryStore extends Store {
     }
 
     @Override
-    public Accessory get() {
+    public synchronized Accessory get() {
         return (Accessory) super.get();
     }
 
-    public void put(Accessory detail) {
-        if(details.size()<limit)
+    public synchronized void put(Accessory detail) {
+        if(details.size()<limit) {
             details.push(detail);
+            notify();
+        }
         else System.err.println("Accessory store is full!");
     }
 }

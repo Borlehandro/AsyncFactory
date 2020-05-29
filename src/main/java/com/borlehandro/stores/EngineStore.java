@@ -9,13 +9,15 @@ public class EngineStore extends Store {
     }
 
     @Override
-    public Engine get() {
+    public synchronized Engine get() {
         return (Engine) super.get();
     }
 
-    public void put(Engine detail) {
-        if(details.size()<limit)
+    public synchronized void put(Engine detail) {
+        if(details.size()<limit) {
             details.push(detail);
+            notify();
+        }
         else System.err.println("Engine store is full!");
     }
 

@@ -14,13 +14,21 @@ public abstract class Store {
         limit = size;
     }
 
-    public Detail get() {
-        if(!details.isEmpty())
+    public synchronized Detail get() {
+
+        if(!details.isEmpty()) {
             return details.pop();
+        }
         else {
             System.err.println(this.getClass() + "STACK IS EMPTY!");
-            return null;
+            try {
+                wait();
+                return get();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
+        return null;
     }
 
 }
