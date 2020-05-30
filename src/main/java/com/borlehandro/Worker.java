@@ -43,7 +43,7 @@ public class Worker implements Task {
             Thread.sleep(workingTime);
             // System.out.println("Working #" + number + ":" + i + "%");
         }
-
+        // System.err.println(getName() + " completed...");
         carsStore.put(new Car(bodyStore.get(), engineStore.get(), accessoryStore.get()));
 
     }

@@ -41,20 +41,23 @@ public class CarsStoreController extends Thread {
         }
 
         while (true) {
-            if (carsStore.got.get()) {
-                try {
+            try {
+                // System.err.println("Controller get!");
+                synchronized (carsStore.controllerMonitor) {
+                    // System.err.println("Get monitor in controller");
+                    carsStore.controllerMonitor.wait();
                     workersPool.addTask(new Worker(bs, es, as, carsStore, PropertiesManager.getValue("carMakingTime")));
-                    System.err.println("Notified!");
-                    carsStore.got.set(false);
-                } catch (IOException exception) {
-                    exception.printStackTrace();
+
+                    // System.err.println("Notified!");
+                    carsStore.controllerMonitor.notify();
                 }
+            } catch (IOException | InterruptedException exception) {
+                exception.printStackTrace();
             }
         }
     }
 
     static void initStores(EngineStore es, AccessoryStore as, BodyStore bs) {
-
         for (int i = 0; i < 1000; i++) {
             es.put(new Engine());
             as.put(new Accessory());

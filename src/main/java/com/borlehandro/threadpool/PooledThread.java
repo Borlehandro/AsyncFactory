@@ -2,20 +2,10 @@ package com.borlehandro.threadpool;
 
 import java.util.List;
 
-/**
- * Title:
- * Description:
- * Copyright:    Copyright (c) 2002
- * Company:
- *
- * @author
- * @version 1.0
- */
-
 public class PooledThread extends Thread {
-    private List taskQueue;
+    private final List<ThreadPoolTask> taskQueue;
 
-    public PooledThread(String name, List taskQueue) {
+    public PooledThread(String name, List<ThreadPoolTask> taskQueue) {
         super(name);
         this.taskQueue = taskQueue;
     }
@@ -32,7 +22,7 @@ public class PooledThread extends Thread {
     }
 
     public void run() {
-        ThreadPoolTask toExecute = null;
+        ThreadPoolTask toExecute;
         while (true) {
             synchronized (taskQueue) {
                 if (taskQueue.isEmpty()) {
@@ -43,10 +33,10 @@ public class PooledThread extends Thread {
                     }
                     continue;
                 } else {
-                    toExecute = (ThreadPoolTask) taskQueue.remove(0);
+                    toExecute = taskQueue.remove(0);
                 }
             }
-            System.out.println(getName() + " got the job: " + toExecute.getName());
+            // System.out.println(getName() + " got the job: " + toExecute.getName());
             performTask(toExecute);
         }
     }

@@ -15,14 +15,15 @@ public abstract class Store {
     }
 
     public synchronized Detail get() {
-
+        notifyAll();
         if(!details.isEmpty()) {
             return details.pop();
         }
         else {
-            System.err.println(this.getClass() + "STACK IS EMPTY!");
+            // System.err.println(this.getClass() + "STACK IS EMPTY!");
             try {
-                wait();
+                while (details.isEmpty())
+                    wait();
                 return get();
             } catch (InterruptedException e) {
                 e.printStackTrace();

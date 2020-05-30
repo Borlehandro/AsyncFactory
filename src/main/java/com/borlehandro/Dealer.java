@@ -22,7 +22,6 @@ public class Dealer extends Thread {
         while (true) {
             try {
                 sleep(dealingTime);
-                System.err.println("Dealer #" + number + " try to get");
                 System.err.println("Dealer #" + number + " get: " + carsStore.get().getUID());
             } catch (InterruptedException e) {
                 e.printStackTrace();
