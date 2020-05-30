@@ -14,10 +14,16 @@ public class AccessoryStore extends Store {
     }
 
     public synchronized void put(Accessory detail) {
-        if(details.size()<limit) {
+        System.err.println("AccessoryStore: " + details.size() + "/" + limit);
+        try {
+            while (details.size() >= limit) {
+                // System.err.println("Accessory store is empty.");
+                wait();
+            }
             details.push(detail);
             notify();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
-        else System.err.println("Accessory store is full!");
     }
 }

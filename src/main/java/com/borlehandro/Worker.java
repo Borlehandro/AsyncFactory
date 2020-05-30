@@ -39,12 +39,13 @@ public class Worker implements Task {
 
     @Override
     public void performWork() throws InterruptedException {
+        Car car = new Car(bodyStore.get(), engineStore.get(), accessoryStore.get());
         for (int i = 0; i < 100; ++i) {
             Thread.sleep(workingTime);
-            // System.out.println("Working #" + number + ":" + i + "%");
+            System.out.println("Working #" + number + ":" + i + "%");
         }
         // System.err.println(getName() + " completed...");
-        carsStore.put(new Car(bodyStore.get(), engineStore.get(), accessoryStore.get()));
+        carsStore.put(car);
 
     }
 }

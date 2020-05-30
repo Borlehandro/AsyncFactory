@@ -1,19 +1,6 @@
 package com.borlehandro.threadpool;
 
-import com.borlehandro.PropertiesManager;
-
-import java.io.IOException;
 import java.util.*;
-
-/**
- * Title:
- * Description:
- * Copyright:    Copyright (c) 2002
- * Company:
- *
- * @author
- * @version 1.0
- */
 
 public class ThreadPool implements TaskListener {
 
@@ -50,8 +37,8 @@ public class ThreadPool implements TaskListener {
         for (int i = 0; i < THREAD_COUNT; i++) {
             availableThreads.add(new PooledThread("Performer_" + i, taskQueue));
         }
-        for (Iterator iter = availableThreads.iterator(); iter.hasNext(); ) {
-            ((Thread) iter.next()).start();
+        for (PooledThread availableThread : availableThreads) {
+            availableThread.start();
         }
 
     }

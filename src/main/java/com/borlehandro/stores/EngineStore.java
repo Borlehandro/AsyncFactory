@@ -14,11 +14,17 @@ public class EngineStore extends Store {
     }
 
     public synchronized void put(Engine detail) {
-        if(details.size()<limit) {
+        System.err.println("EngineStore: " + details.size() + "/" + limit);
+        try {
+            while (details.size() >= limit) {
+                // System.err.println("Engine store is empty.");
+                wait();
+            }
             details.push(detail);
             notify();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
-        else System.err.println("Engine store is full!");
     }
 
 }

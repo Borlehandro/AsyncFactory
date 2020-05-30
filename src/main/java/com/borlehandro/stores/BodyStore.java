@@ -14,10 +14,16 @@ public class BodyStore extends Store {
     }
 
     public synchronized void put(Body detail) {
-        if(details.size()<limit) {
+        System.err.println("BodyStore: " + details.size() + "/" + limit);
+        try {
+            while (details.size() >= limit) {
+                // System.err.println("Body store is empty.");
+                wait();
+            }
             details.push(detail);
             notify();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
-        else System.err.println("Body store is full!");
     }
 }

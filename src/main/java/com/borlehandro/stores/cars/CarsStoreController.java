@@ -2,9 +2,6 @@ package com.borlehandro.stores.cars;
 
 import com.borlehandro.PropertiesManager;
 import com.borlehandro.Worker;
-import com.borlehandro.details.Accessory;
-import com.borlehandro.details.Body;
-import com.borlehandro.details.Engine;
 import com.borlehandro.stores.AccessoryStore;
 import com.borlehandro.stores.BodyStore;
 import com.borlehandro.stores.EngineStore;
@@ -16,29 +13,20 @@ public class CarsStoreController extends Thread {
 
     private final CarsStore carsStore;
     private final ThreadPool workersPool;
-    EngineStore es;
-    AccessoryStore as;
-    BodyStore bs;
+    private final EngineStore engineStore;
+    private final AccessoryStore accessoryStore;
+    private final BodyStore bodyStore;
 
-    public CarsStoreController(CarsStore carsStore, ThreadPool workersPool) {
+    public CarsStoreController(CarsStore carsStore, ThreadPool workersPool, EngineStore engineStore, AccessoryStore accessoryStore, BodyStore bodyStore) {
         this.carsStore = carsStore;
         this.workersPool = workersPool;
+        this.engineStore = engineStore;
+        this.accessoryStore = accessoryStore;
+        this.bodyStore = bodyStore;
     }
 
     @Override
     public void run() {
-
-        try {
-
-            es = new EngineStore(PropertiesManager.getValue("engineStoreSize"));
-            as = new AccessoryStore(PropertiesManager.getValue("accessoryStoreSize"));
-            bs = new BodyStore(PropertiesManager.getValue("bodyStoreSize"));
-
-            initStores(es, as, bs);
-
-        } catch (IOException exception) {
-            exception.printStackTrace();
-        }
 
         while (true) {
             try {
@@ -46,7 +34,7 @@ public class CarsStoreController extends Thread {
                 synchronized (carsStore.controllerMonitor) {
                     // System.err.println("Get monitor in controller");
                     carsStore.controllerMonitor.wait();
-                    workersPool.addTask(new Worker(bs, es, as, carsStore, PropertiesManager.getValue("carMakingTime")));
+                    workersPool.addTask(new Worker(bodyStore, engineStore, accessoryStore, carsStore, PropertiesManager.getValue("carMakingTime")));
 
                     // System.err.println("Notified!");
                     carsStore.controllerMonitor.notify();
@@ -55,14 +43,5 @@ public class CarsStoreController extends Thread {
                 exception.printStackTrace();
             }
         }
-    }
-
-    static void initStores(EngineStore es, AccessoryStore as, BodyStore bs) {
-        for (int i = 0; i < 1000; i++) {
-            es.put(new Engine());
-            as.put(new Accessory());
-            bs.put(new Body());
-        }
-
     }
 }

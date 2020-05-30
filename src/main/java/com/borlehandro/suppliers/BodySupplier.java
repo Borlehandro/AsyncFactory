@@ -8,8 +8,8 @@ import java.io.IOException;
 
 public class BodySupplier extends Supplier {
 
-    public BodySupplier(BodyStore store) {
-        super(store);
+    public BodySupplier(ThreadGroup group, String name, BodyStore store) {
+        super(group, name, store);
         try {
             workTime = PropertiesManager.getValue("bodyMakingTime");
         } catch (IOException exception) {

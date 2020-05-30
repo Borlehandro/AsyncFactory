@@ -8,9 +8,9 @@ import java.io.IOException;
 
 public class AccessorySupplier extends Supplier {
 
-    public AccessorySupplier(AccessoryStore store) {
+    public AccessorySupplier(ThreadGroup group, String name, AccessoryStore store) {
 
-        super(store);
+        super(group, name, store);
 
         try {
             workTime = PropertiesManager.getValue("accessoryMakingTime");

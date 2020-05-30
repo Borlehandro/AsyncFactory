@@ -1,17 +1,15 @@
 package com.borlehandro.suppliers;
 
 import com.borlehandro.PropertiesManager;
-import com.borlehandro.details.Body;
 import com.borlehandro.details.Engine;
-import com.borlehandro.stores.BodyStore;
 import com.borlehandro.stores.EngineStore;
 
 import java.io.IOException;
 
 public class EngineSupplier extends Supplier {
 
-    public EngineSupplier(EngineStore store) {
-        super(store);
+    public EngineSupplier(ThreadGroup group, String name, EngineStore store) {
+        super(group, name, store);
         try {
             workTime = PropertiesManager.getValue("engineMakingTime");
         } catch (IOException exception) {
