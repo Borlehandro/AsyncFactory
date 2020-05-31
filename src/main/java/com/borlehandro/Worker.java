@@ -38,7 +38,6 @@ public class Worker implements Task {
         number = count;
     }
 
-
     @Override
     public String getName() {
         return "Worker #" + number;

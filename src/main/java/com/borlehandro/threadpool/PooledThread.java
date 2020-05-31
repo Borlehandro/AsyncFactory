@@ -23,13 +23,14 @@ public class PooledThread extends Thread {
 
     public void run() {
         ThreadPoolTask toExecute;
-        while (true) {
+        while (!isInterrupted()) {
             synchronized (taskQueue) {
                 if (taskQueue.isEmpty()) {
                     try {
                         taskQueue.wait();
                     } catch (InterruptedException ex) {
                         System.err.println("Thread was inetrrupted:" + getName());
+                        break;
                     }
                     continue;
                 } else {
@@ -39,5 +40,6 @@ public class PooledThread extends Thread {
             // System.out.println(getName() + " got the job: " + toExecute.getName());
             performTask(toExecute);
         }
+
     }
 }

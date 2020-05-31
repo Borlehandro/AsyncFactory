@@ -42,6 +42,10 @@ public class ThreadPool implements TaskListener {
         for (PooledThread availableThread : availableThreads) {
             availableThread.start();
         }
+    }
 
+    public void interrupt() {
+        availableThreads.forEach(Thread::interrupt);
+        taskQueue.clear();
     }
 }

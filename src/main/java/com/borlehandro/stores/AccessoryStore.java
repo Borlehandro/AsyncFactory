@@ -27,7 +27,7 @@ public class AccessoryStore extends Store {
                 sizeMonitor.notify();
             }
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            System.err.println("Accessory store interrupted.");
         }
     }
 }

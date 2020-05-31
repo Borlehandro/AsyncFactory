@@ -20,14 +20,15 @@ public class EngineSupplier extends Supplier {
 
     @Override
     public void run() {
-        while (true) {
+        while (!isInterrupted()) {
             try {
                 sleep(workTime);
                 ((EngineStore) store).put(new Engine());
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                break;
             }
         }
+        System.err.println(getName() + " finished.");
     }
 
 }

@@ -19,13 +19,14 @@ public class BodySupplier extends Supplier {
 
     @Override
     public void run() {
-        while (true) {
+        while (!isInterrupted()) {
             try {
                 sleep(workTime);
                 ((BodyStore) store).put(new Body());
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                break;
             }
         }
+        System.err.println(getName() + " finished.");
     }
 }

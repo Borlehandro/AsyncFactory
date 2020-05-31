@@ -29,7 +29,7 @@ public class Dealer extends Thread {
 
     @Override
     public void run() {
-        while (true) {
+        while (!isInterrupted()) {
             try {
                 sleep(dealingTime);
                 Car car = carsStore.get();
@@ -41,13 +41,14 @@ public class Dealer extends Thread {
                         + " accessory: " + car.getAccessory().getUID());
 
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                break;
             }
         }
+        System.err.println(getName() + " finished.");
     }
 
     public synchronized void changeDealingTime(int newTime) {
-        System.err.println("Dealer time changed : " + newTime);
+        System.out.println("Dealer time changed : " + newTime);
         dealingTime = newTime;
     }
 

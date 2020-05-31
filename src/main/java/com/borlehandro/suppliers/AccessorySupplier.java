@@ -21,14 +21,14 @@ public class AccessorySupplier extends Supplier {
 
     @Override
     public void run() {
-        while (true) {
+        while (!isInterrupted()) {
             try {
                 sleep(workTime);
                 ((AccessoryStore) store).put(new Accessory());
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                break;
             }
         }
+        System.err.println(getName() + " finished.");
     }
-
 }

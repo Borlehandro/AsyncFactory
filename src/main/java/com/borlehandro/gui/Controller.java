@@ -13,6 +13,7 @@ import com.borlehandro.suppliers.AccessorySupplier;
 import com.borlehandro.suppliers.BodySupplier;
 import com.borlehandro.suppliers.EngineSupplier;
 import com.borlehandro.threadpool.ThreadPool;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
@@ -63,6 +64,11 @@ public class Controller {
     private static ThreadGroup engineSuppliers;
     private static ThreadGroup accessorySuppliers;
     private static ThreadGroup dealers;
+
+    private static StoreProgressListener bodyListener;
+    private static StoreProgressListener engineListener;
+    private static StoreProgressListener accessoryListener;
+    private static StoreProgressListener carListener;
 
     public void initialize() {
         initModel();
@@ -143,13 +149,13 @@ public class Controller {
             exception.printStackTrace();
         }
 
-        StoreProgressListener bodyListener = new StoreProgressListener(bodyStore, bodyProgress);
+         bodyListener = new StoreProgressListener(bodyStore, bodyProgress);
         bodyListener.start();
-        StoreProgressListener engineListener = new StoreProgressListener(engineStore, engineProgress);
+        engineListener = new StoreProgressListener(engineStore, engineProgress);
         engineListener.start();
-        StoreProgressListener accessoryListener = new StoreProgressListener(accessoryStore, accessoryProgress);
+        accessoryListener = new StoreProgressListener(accessoryStore, accessoryProgress);
         accessoryListener.start();
-        StoreProgressListener carListener = new StoreProgressListener(carsStore, carProgress);
+        carListener = new StoreProgressListener(carsStore, carProgress);
         carListener.start();
 
     }
@@ -188,4 +194,20 @@ public class Controller {
             exception.printStackTrace();
         }
     }
+
+    public void shutdown() {
+        bodySuppliers.interrupt();
+        engineSuppliers.interrupt();
+        accessorySuppliers.interrupt();
+        dealers.interrupt();
+
+        bodyListener.interrupt();
+        engineListener.interrupt();
+        accessoryListener.interrupt();
+        carListener.interrupt();
+
+        workersPool.interrupt();
+        Platform.exit();
+    }
+
 }

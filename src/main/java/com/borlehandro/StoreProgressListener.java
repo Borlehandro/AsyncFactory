@@ -17,13 +17,14 @@ public class StoreProgressListener extends Thread {
     public void run() {
         synchronized (sizeMonitor) {
             try {
-                while (true) {
+                while (!isInterrupted()) {
+
                     sizeMonitor.wait();
                     System.err.println("Monitor response");
                     progressBar.setProgress((double) sizeMonitor.getSize() / sizeMonitor.getLimit());
                 }
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                System.err.println("Progress listener interrupted.");
             }
         }
     }
