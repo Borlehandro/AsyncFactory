@@ -1,5 +1,7 @@
 package com.borlehandro.threadpool;
 
+import com.borlehandro.Worker;
+
 import java.util.*;
 
 public class ThreadPool implements TaskListener {
@@ -41,9 +43,5 @@ public class ThreadPool implements TaskListener {
             availableThread.start();
         }
 
-    }
-
-    public int getTasksSize() {
-        return taskQueue.size();
     }
 }

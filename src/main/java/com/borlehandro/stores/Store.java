@@ -1,5 +1,6 @@
 package com.borlehandro.stores;
 
+import com.borlehandro.SizeMonitor;
 import com.borlehandro.details.Detail;
 
 import java.util.LinkedList;
@@ -8,18 +9,23 @@ public abstract class Store {
 
     protected final LinkedList<Detail> details;
     protected int limit;
+    public final SizeMonitor sizeMonitor;
 
     protected Store(int size) {
         details = new LinkedList<>();
         limit = size;
+        sizeMonitor = new SizeMonitor(0, limit);
     }
 
     public synchronized Detail get() {
         notifyAll();
-        if(!details.isEmpty()) {
-            return details.pop();
+        synchronized (sizeMonitor) {
+            sizeMonitor.setSize(sizeMonitor.getSize() - (details.isEmpty() ? 0 : 1));
+            sizeMonitor.notify();
         }
-        else {
+        if (!details.isEmpty()) {
+            return details.pop();
+        } else {
             // System.err.println(this.getClass() + "STACK IS EMPTY!");
             try {
                 while (details.isEmpty())
@@ -30,6 +36,14 @@ public abstract class Store {
             }
         }
         return null;
+    }
+
+    public synchronized int getSize() {
+        return details.size();
+    }
+
+    public synchronized int getLimit() {
+        return limit;
     }
 
 }

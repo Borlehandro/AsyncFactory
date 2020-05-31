@@ -18,4 +18,15 @@ public class Car extends Detail {
         count++;
     }
 
+    public Body getBody() {
+        return body;
+    }
+
+    public Engine getEngine() {
+        return engine;
+    }
+
+    public Accessory getAccessory() {
+        return accessory;
+    }
 }

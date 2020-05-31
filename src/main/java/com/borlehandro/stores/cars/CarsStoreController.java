@@ -34,12 +34,12 @@ public class CarsStoreController extends Thread {
                 synchronized (carsStore.controllerMonitor) {
                     // System.err.println("Get monitor in controller");
                     carsStore.controllerMonitor.wait();
-                    workersPool.addTask(new Worker(bodyStore, engineStore, accessoryStore, carsStore, PropertiesManager.getValue("carMakingTime")));
+                    workersPool.addTask(new Worker(bodyStore, engineStore, accessoryStore, carsStore));
 
                     // System.err.println("Notified!");
                     carsStore.controllerMonitor.notify();
                 }
-            } catch (IOException | InterruptedException exception) {
+            } catch (InterruptedException exception) {
                 exception.printStackTrace();
             }
         }

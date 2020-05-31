@@ -1,18 +1,28 @@
 package com.borlehandro;
 
+import com.borlehandro.details.Car;
 import com.borlehandro.stores.cars.CarsStore;
+import org.apache.log4j.Logger;
+
+import java.io.IOException;
 
 public class Dealer extends Thread {
 
     private static int count;
 
     private final CarsStore carsStore;
-    private final int dealingTime;
+    private int dealingTime;
     private final int number;
+    private static final Logger logger = Logger.getLogger(Dealer.class.getName());
 
-    public Dealer(CarsStore carsStore, int time) {
+    public Dealer(ThreadGroup group, String name, CarsStore carsStore) {
+        super(group, name);
         this.carsStore = carsStore;
-        dealingTime = time;
+        try {
+            dealingTime = PropertiesManager.getValue("dealingTime");
+        } catch (IOException exception) {
+            exception.printStackTrace();
+        }
         count++;
         number = count;
     }
@@ -22,10 +32,23 @@ public class Dealer extends Thread {
         while (true) {
             try {
                 sleep(dealingTime);
-                System.err.println("Dealer #" + number + " get: " + carsStore.get().getUID());
+                Car car = carsStore.get();
+                System.err.println("Dealer #" + number + " get: " + car.getUID());
+
+                logger.info("Dealer #" + number + " car: " + car.getUID()
+                        + " body: " + car.getBody().getUID()
+                        + " engine: " + car.getEngine().getUID()
+                        + " accessory: " + car.getAccessory().getUID());
+
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
     }
+
+    public synchronized void changeDealingTime(int newTime) {
+        System.err.println("Dealer time changed : " + newTime);
+        dealingTime = newTime;
+    }
+
 }

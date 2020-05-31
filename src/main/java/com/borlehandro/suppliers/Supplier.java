@@ -12,4 +12,8 @@ public abstract class Supplier extends Thread {
         this.store = store;
     }
 
+    public synchronized void changeWorkTime(int newTime) {
+        System.err.println("Supplier time changed : " + newTime);
+        workTime = newTime;
+    }
 }

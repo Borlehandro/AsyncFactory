@@ -27,10 +27,16 @@ public class CarsStore extends Store {
     }
 
     public synchronized void put(Car detail) {
+        System.err.println("Car put.");
         if (details.size() < limit) {
             details.push(detail);
             // System.err.println("Add car : " + detail.getUID());
+            System.err.println("Cars store: " + details.size() + "/" + limit);
             notifyAll();
+            synchronized (sizeMonitor) {
+                sizeMonitor.setSize(sizeMonitor.getSize() + 1);
+                sizeMonitor.notify();
+            }
         } else System.err.println("Cars store is full!");
     }
 

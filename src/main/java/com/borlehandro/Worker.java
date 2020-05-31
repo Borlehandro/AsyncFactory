@@ -19,14 +19,21 @@ public class Worker implements Task {
     private static int count = 0;
     private final int number;
 
-    private final int workingTime;
+    private static int workingTime;
 
-    public Worker(BodyStore bodyStore, EngineStore engineStore, AccessoryStore accessoryStore, CarsStore carsStore, int time) throws IOException {
+    static {
+        try {
+            workingTime = PropertiesManager.getValue("carMakingTime");
+        } catch (IOException exception) {
+            exception.printStackTrace();
+        }
+    }
+
+    public Worker(BodyStore bodyStore, EngineStore engineStore, AccessoryStore accessoryStore, CarsStore carsStore) {
         this.bodyStore = bodyStore;
         this.engineStore = engineStore;
         this.accessoryStore = accessoryStore;
         this.carsStore = carsStore;
-        workingTime = time;
         count++;
         number = count;
     }
@@ -40,12 +47,12 @@ public class Worker implements Task {
     @Override
     public void performWork() throws InterruptedException {
         Car car = new Car(bodyStore.get(), engineStore.get(), accessoryStore.get());
-        for (int i = 0; i < 100; ++i) {
-            Thread.sleep(workingTime);
-            System.out.println("Working #" + number + ":" + i + "%");
-        }
-        // System.err.println(getName() + " completed...");
+        Thread.sleep(workingTime);
         carsStore.put(car);
-
     }
+
+    public static void changeWorkTime(int newTime) {
+        workingTime = newTime;
+    }
+
 }

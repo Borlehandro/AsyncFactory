@@ -22,6 +22,10 @@ public class EngineStore extends Store {
             }
             details.push(detail);
             notify();
+            synchronized (sizeMonitor) {
+                sizeMonitor.setSize(sizeMonitor.getSize() + 1);
+                sizeMonitor.notify();
+            }
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
